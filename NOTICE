@@ -3,9 +3,8 @@ Copyright (c) 2026 ArtCraft Team and the Craft Anything contributors.
 Licensed under the MIT License or the Apache License, Version 2.0, at your option
 (LICENSE-MIT, LICENSE-APACHE).
 
-The ArtCraft name, wordmark and logos in docs/brand/ are trademarks of the ArtCraft Team. They are
-not open source and are not covered by the license above; their terms are in
-docs/brand/LICENSE-brand.txt.
+The ArtCraft name, wordmark and logos are trademarks of the ArtCraft Team. They are not open
+source and are not covered by the license above.
 
 Third-party material
 
@@ -29,3 +28,11 @@ Rust crates are listed with their licences in the third-party licence bundle shi
 release (see docs/licences.md).
 
 Builds made with craft-fonts (CRAFT_FONTS_DIR) also embed the fonts listed in ATTRIBUTION.md.
+
+Buildflow
+
+Buildflow is a modified version of Craft Anything, made by Reach Neo as part of the FlowApps suite.
+It changes the name, icon, colours, identifiers and defaults; rebrand/apply.py lists every change.
+Buildflow is not affiliated with or endorsed by the ArtCraft Team. The ArtCraft logos are not
+included. The Buildflow name and mark (brand/, assets/app-icon/) are not covered by the license
+above.

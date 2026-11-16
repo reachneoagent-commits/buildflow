@@ -281,14 +281,14 @@ impl McpCommand {
 /// that ran out of time says nothing about the program, so the build goes ahead. Stopping the
 /// build ends the check, as `ErrorCode::Cancelled`.
 pub fn cli_can_start(cli: Option<&Path>, stop: &CancelToken) -> Result<(), ToolError> {
-    const REINSTALL: &str = "Install the latest Craft Anything again: it keeps this helper next to the app. If you built the app yourself, run `cargo build -p craft-anything-cli` too.";
+    const REINSTALL: &str =
+        "Install the latest Buildflow again: it keeps this helper next to the app. If you built the app yourself, run `cargo build -p craft-anything-cli` too.";
     let Some(cli) = cli else {
-        return Err(ToolError::new(ErrorCode::EngineMissing, "Craft Anything's helper program (craft-anything-cli) is missing, so the builder can't start.")
+        return Err(ToolError::new(ErrorCode::EngineMissing, "Buildflow's helper program (craft-anything-cli) is missing, so the builder can't start.")
             .with_remediation(REINSTALL));
     };
     let failed = |why: String| {
-        ToolError::new(ErrorCode::EngineMissing, format!("Craft Anything's helper program at {} wouldn't start: {why}", cli.display()))
-            .with_remediation(REINSTALL)
+        ToolError::new(ErrorCode::EngineMissing, format!("Buildflow's helper program at {} wouldn't start: {why}", cli.display())).with_remediation(REINSTALL)
     };
     let stop = stop.clone();
     match Process::new(cli.as_os_str()).arg("--version").timeout(Duration::from_secs(30)).stdout_cap(64 * 1024).cancel_when(move || stop.is_cancelled()).run() {
@@ -466,7 +466,7 @@ pub(crate) fn claude_code_failure_in(why: &str, folder: Option<&Path>) -> (Strin
     (format!("Claude Code stopped: {why}"), sign_in_hint_in(why, adapters::in_flatpak(), folder))
 }
 
-/// Variables a Claude Code session sets for its own child processes. When Craft Anything itself
+/// Variables a Claude Code session sets for its own child processes. When Buildflow itself
 /// runs inside such a session, they'd make the person's `claude` act as part of that session
 /// instead of as their own install, so they're removed. The person's own settings (provider
 /// choice `CLAUDE_CODE_USE_*`, `CLAUDE_CONFIG_DIR`, `ANTHROPIC_*`) are kept.
@@ -1042,7 +1042,7 @@ fn run_cli(spec: &CliSpec, text: &str, retry: bool, tx: &Sender<AgentEvent>, sto
     };
     let _ =
         tx.send(AgentEvent::Status { text: format!("Asking {}{}…", display_for(&agent), remote.as_ref().map(|h| format!(" on {h}")).unwrap_or_default()) });
-    // Sessions earlier turns left behind when Craft Anything was killed mid-turn (#1115). Off this
+    // Sessions earlier turns left behind when Buildflow was killed mid-turn (#1115). Off this
     // thread: a delete over SSH may wait on a host that's away.
     let records = spec.logs.as_deref().map(unfinished::dir_in);
     if let Some(dir) = records.clone() {
@@ -1158,7 +1158,7 @@ fn run_cli(spec: &CliSpec, text: &str, retry: bool, tx: &Sender<AgentEvent>, sto
                 Ok(out) => (Some(out), None),
                 Err(e) => (None, Some(e.message.as_str())),
             };
-            if let Some(path) = shown.save_with(&agent, out, Some("Craft Anything's tools did not start."), error).0 {
+            if let Some(path) = shown.save_with(&agent, out, Some("Buildflow's tools did not start."), error).0 {
                 let _ = tx.send(AgentEvent::Status { text: format!("The details are in {}", path.display()) });
             }
         }
@@ -2365,9 +2365,9 @@ mod tests {
         let config = tempfile::tempdir().unwrap();
         let id = "0e4a6b1c-1111-4222-8333-944455556666";
         let saved = format!("{{\"type\":\"user\",\"sessionId\":\"{id}\",\"message\":{{\"content\":\"Make a notes app.\"}}}}\n");
-        let cwd = Path::new("/home/someone/Craft Anything/notes.app");
+        let cwd = Path::new("/home/someone/Buildflow/notes.app");
         assert!(adapters::claude_restore(config.path(), id, saved.as_bytes(), cwd).unwrap());
-        let put = config.path().join("projects").join("-home-someone-Craft-Anything-notes-app").join(format!("{id}.jsonl"));
+        let put = config.path().join("projects").join("-home-someone-Buildflow-notes-app").join(format!("{id}.jsonl"));
         assert_eq!(std::fs::read_to_string(&put).unwrap(), saved);
         assert_eq!(adapters::claude_session_file(config.path(), id), Some(put.clone()), "Claude Code finds it by its id");
         // There already: left as it is (it may have moved on since the copy was kept).
@@ -2402,7 +2402,7 @@ mod tests {
         let all = adapters::claude_handoff(&saved, 10_000).unwrap();
         assert_eq!(
             all,
-            "Craft Anything asked you: Make a notes app.\n\nYou answered: Built a notes app with a sidebar.\n\nCraft Anything asked you: The person asks: \"make it blue\"\n\nYou answered: Made it blue."
+            "Buildflow asked you: Make a notes app.\n\nYou answered: Built a notes app with a sidebar.\n\nBuildflow asked you: The person asks: \"make it blue\"\n\nYou answered: Made it blue."
         );
         // Short of room, the newest is kept.
         let short = adapters::claude_handoff(&saved, 80).unwrap();

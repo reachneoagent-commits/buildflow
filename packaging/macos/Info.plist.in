@@ -7,13 +7,13 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>Craft Anything</string>
+  <string>Buildflow</string>
   <key>CFBundleName</key>
-  <string>Craft Anything</string>
+  <string>Buildflow</string>
   <key>CFBundleExecutable</key>
   <string>craft-anything</string>
   <key>CFBundleIdentifier</key>
-  <string>ai.storyteller.craft-anything</string>
+  <string>io.github.reachneoagent-commits.buildflow</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundlePackageType</key>

@@ -239,7 +239,7 @@ fn build_files_list(ctx: &mut Ctx<'_>, params: Value) -> Result<ToolOutput, Tool
                 break;
             }
             let path = e.path();
-            // Craft Anything's own records are not the app, even when the app is the project
+            // Buildflow's own records are not the app, even when the app is the project
             // folder; the brief names them and the builder must leave them alone.
             if !listing_own && ws.is_own_record(&path) {
                 continue;
@@ -426,7 +426,7 @@ mod tests {
     }
 
     /// "Work on my project" keeps the app in the project root: the default listing must be that
-    /// root, not a missing or nested `app/`, and not Craft Anything's own records.
+    /// root, not a missing or nested `app/`, and not Buildflow's own records.
     #[test]
     fn a_project_edited_in_place_is_listed_from_its_own_folder() {
         let d = tempfile::tempdir().unwrap();
@@ -438,7 +438,7 @@ mod tests {
         std::fs::write(d.path().join("app/other.txt"), "not the app\n").unwrap();
         let mut s = crate::testing::session();
         let ws = Workspace::create_at(d.path(), "Mine", "Add a page", TargetRef::None, Some(ExistingFiles::Edit)).unwrap();
-        // checks/ isn't a Craft Anything record the builder must avoid: it keeps its own notes there.
+        // checks/ isn't a Buildflow record the builder must avoid: it keeps its own notes there.
         std::fs::create_dir_all(d.path().join("checks")).unwrap();
         std::fs::write(d.path().join("checks/notes.md"), "note\n").unwrap();
         // capture/ is an own record in the root listing, but the brief tells the builder to read it.
@@ -459,7 +459,7 @@ mod tests {
         assert!(entries.contains("main.py") && entries.contains("src/app.py"), "{list}");
         assert!(entries.contains("app/other.txt"), "a real nested folder is still part of the root: {list}");
         assert!(entries.contains("checks/notes.md"), "the builder's own check notes stay visible: {list}");
-        assert!(!entries.contains("craft.json"), "Craft Anything's own records are not app files: {list}");
+        assert!(!entries.contains("craft.json"), "Buildflow's own records are not app files: {list}");
         assert!(!entries.contains("capture/"), "capture stays out of the default root listing: {list}");
         assert!(entries.contains("vendor/"), "the dependency folder is listed but not walked: {list}");
         assert_eq!(list["truncated"], false, "vendor must not consume the entry cap: {list}");

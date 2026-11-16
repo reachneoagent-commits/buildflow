@@ -97,6 +97,16 @@ pub const PROVIDERS: &[Provider] = &[
         default_model: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
         catalog_id: "deepinfra",
     },
+    // Buildflow (rebrand/apply.py): NVIDIA NIM's hosted, OpenAI-compatible API.
+    Provider {
+        name: "NVIDIA NIM",
+        kind: BackendKind::OpenaiCompatible,
+        base_url: "https://integrate.api.nvidia.com/v1",
+        key_env: "NVIDIA_API_KEY",
+        alt_key_env: Some("NGC_API_KEY"),
+        default_model: "meta/llama-3.3-70b-instruct",
+        catalog_id: "nvidia",
+    },
 ];
 
 impl Provider {

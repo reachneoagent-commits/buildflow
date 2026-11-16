@@ -85,7 +85,7 @@ pub struct Tokens {
 
 /// The app colour: getartcraft.com's deep accent (#1659c4). White on it passes WCAG AA; on its
 /// bright accent (#2d81ff, used for hover) it doesn't.
-pub const BRAND: Color32 = Color32::from_rgb(0x16, 0x59, 0xc4);
+pub const BRAND: Color32 = crate::flow_theme::LIME;
 
 pub const SEEN_IT: Color32 = Color32::from_rgb(0x3f, 0xb2, 0x7f);
 pub const WORKED_OUT: Color32 = Color32::from_rgb(0x5b, 0x8d, 0xef);
@@ -107,7 +107,7 @@ pub fn confidence_label(c: Option<Confidence>) -> &'static str {
 }
 
 impl Tokens {
-    pub fn for_kind(kind: ThemeKind) -> Self {
+    fn upstream_for_kind(kind: ThemeKind) -> Self {
         match kind {
             // getartcraft.com's dark: warm near-black (#121316), its #101014 for the sidebar, cards
             // and controls its warm ink (#f2f1ee) laid over the background at 4-15%.
@@ -430,6 +430,13 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind, roomy: bool) {
         s.spacing.tooltip_width = 320.0;
         s.interaction.tooltip_delay = 0.3;
     });
+}
+
+// Buildflow (rebrand/apply.py): upstream's themes above are the base; our colours are laid over them.
+impl Tokens {
+    pub fn for_kind(kind: ThemeKind) -> Self {
+        crate::flow_theme::apply(Self::upstream_for_kind(kind))
+    }
 }
 
 #[cfg(test)]

@@ -7,7 +7,7 @@ version = "0.6.1"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 rust-version = "1.97"
-repository = "https://github.com/storytold/craft-anything"
+repository = "https://github.com/reachneoagent-commits/buildflow"
 
 [workspace.dependencies]
 # internal
@@ -93,7 +93,7 @@ debug = false
 strip = true
 panic = "abort"
 
-# wgpu-hal with a Metal shader-language probe (Craft Anything #742; upstream wgpu #10687).
+# wgpu-hal with a Metal shader-language probe (Buildflow #742; upstream wgpu #10687).
 # Remove this once the upstream wgpu release picks a Metal version the compiler accepts. See vendor/wgpu-hal/CRAFT_ANYTHING.md.
 [patch.crates-io]
 wgpu-hal = { path = "vendor/wgpu-hal" }

@@ -1046,9 +1046,7 @@ mod tests {
         core.sign_in_fix = super::super::adapter_for("copilot").sign_in_fix();
         core.start();
         let output = events(core.line(r#"{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"Authentication required"}}"#));
-        assert!(
-            matches!(&output[0], AgentEvent::Error { remediation: Some(fix), .. } if fix.contains("copilot login") && fix.contains("restart Craft Anything"))
-        );
+        assert!(matches!(&output[0], AgentEvent::Error { remediation: Some(fix), .. } if fix.contains("copilot login") && fix.contains("restart Buildflow")));
     }
 
     #[test]

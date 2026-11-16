@@ -13,9 +13,9 @@ const CARD_BORDER: Color32 = Color32::from_rgb(0x2a, 0x2a, 0x2e);
 const TEXT: Color32 = Color32::from_rgb(0xec, 0xec, 0xf0);
 const TEXT_DIM: Color32 = Color32::from_rgb(0xa9, 0xa9, 0xb2);
 /// The app colour (getartcraft.com's deep accent), as in the desktop app.
-const BRAND: Color32 = Color32::from_rgb(0x16, 0x59, 0xc4);
+const BRAND: Color32 = Color32::from_rgb(0xd1, 0xfb, 0x8c);
 /// The app colour as text on the dark background (getartcraft.com's light accent).
-const BRAND_INK: Color32 = Color32::from_rgb(0x74, 0xaa, 0xff);
+const BRAND_INK: Color32 = Color32::from_rgb(0xd1, 0xfb, 0x8c);
 const SEEN_IT: Color32 = Color32::from_rgb(0x3f, 0xb2, 0x7f);
 const WORKED_OUT: Color32 = Color32::from_rgb(0x5b, 0x8d, 0xef);
 const BEST_GUESS: Color32 = Color32::from_rgb(0xe0, 0xa2, 0x3a);
@@ -80,7 +80,7 @@ impl Viewer {
                 ui.set_max_width(ui.available_width().min(860.0));
                 ui.add_space(24.0);
                 ui.horizontal(|ui| {
-                    ui.label(RichText::new("Craft Anything").size(26.0).strong());
+                    ui.label(RichText::new("Buildflow").size(26.0).strong());
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         if ui.button(RichText::new("Open a file…").size(15.0)).clicked() {
                             (self.open)();
@@ -101,9 +101,7 @@ impl Viewer {
                     show_look(ui, l);
                 } else {
                     card(ui, |ui| {
-                        ui.label(
-                            "Drop a program, app, library or any file here. Craft Anything tells you what it is, what it runs on and what it was made with.",
-                        );
+                        ui.label("Drop a program, app, library or any file here. Buildflow tells you what it is, what it runs on and what it was made with.");
                         ui.add_space(6.0);
                         ui.label(RichText::new("Everything happens in this page: your file is never uploaded.").color(TEXT_DIM));
                     });
@@ -116,7 +114,7 @@ impl Viewer {
                     )
                     .color(TEXT_DIM),
                 );
-                ui.hyperlink_to("Get the desktop app", "https://github.com/storytold/craft-anything/releases/latest");
+                ui.hyperlink_to("Get the desktop app", "https://github.com/reachneoagent-commits/buildflow/releases/latest");
             });
         });
     }

@@ -404,7 +404,7 @@ fn core_evidence_import(ctx: &mut Ctx<'_>, params: Value) -> Result<ToolOutput, 
     let bytes = craft_anything_platform::fs::read_file_capped(&path, MAX_BUNDLE_BYTES)?;
     let v: Value = serde_json::from_slice(&bytes).map_err(|e| ToolError::invalid(format!("not a bundle: {e}")))?;
     if v.get("format").and_then(Value::as_str) != Some(BUNDLE_FORMAT) {
-        return Err(ToolError::invalid("not a Craft Anything evidence bundle"));
+        return Err(ToolError::invalid("not a Buildflow evidence bundle"));
     }
     let mut imported = 0usize;
     let mut rejected = Vec::new();

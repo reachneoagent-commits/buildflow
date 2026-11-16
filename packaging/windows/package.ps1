@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-  Build, sign and package Craft Anything for Windows.
+  Build, sign and package Buildflow for Windows.
 
 .DESCRIPTION
   Produces, in $env:DIST (default: dist/release):
-    craft-anything-<version>-windows-<arch>.msi            per-machine installer (WiX v5)
-    craft-anything-<version>-windows-<arch>-portable.zip   craft-anything.exe (+ craft-anything-cli.exe), portable.txt and the licences
+    buildflow-<version>-windows-<arch>.msi            per-machine installer (WiX v5)
+    buildflow-<version>-windows-<arch>-portable.zip   craft-anything.exe (+ craft-anything-cli.exe), portable.txt and the licences
 
   craft-anything-cli.exe is built and shipped once apps/craft-anything-cli exists in the workspace.
 
@@ -60,7 +60,7 @@ if (-not $env:CRAFT_ANYTHING_BUILD_DATE) { $env:CRAFT_ANYTHING_BUILD_DATE = (Get
 $HasCli = Test-Path (Join-Path $Root 'apps\craft-anything-cli\Cargo.toml')
 $Bins = @('craft-anything'); if ($HasCli) { $Bins += 'craft-anything-cli' }
 
-Write-Output "Craft Anything $Version for Windows $Arch ($Target): $($Bins -join ', ')"
+Write-Output "Buildflow $Version for Windows $Arch ($Target): $($Bins -join ', ')"
 
 if (-not $SkipBuild) {
   # Static CRT: no VC++ redistributable needed. Scoped to the target so host build scripts and
@@ -99,7 +99,7 @@ foreach ($exe in $Exes) { Copy-Item (Join-Path $Bin $exe) $Stage }
 & (Join-Path $PSScriptRoot 'sign.ps1') @($Exes | ForEach-Object { Join-Path $Stage $_ })
 
 # ---- MSI ---------------------------------------------------------------------------------------
-# The setup wizard's art, drawn here from the app icon so the MSI shows Craft Anything rather than
+# The setup wizard's art, drawn here from the app icon so the MSI shows Buildflow rather than
 # WiX's stock bitmaps: a 493x58 banner across the top of the inner pages (the page title is drawn
 # over its left side, so that stays white) and a 493x312 backdrop for the Welcome and Finish pages
 # (their text sits on the right; the left 164 px are ours). Both must be 24-bit BMPs.
@@ -136,7 +136,7 @@ $Banner = Join-Path $Stage 'installer-banner.bmp'
 $Dialog = Join-Path $Stage 'installer-dialog.bmp'
 New-InstallerArt (Join-Path $Root 'assets\app-icon\hicolor\256x256\apps\ai.storyteller.craft-anything.png') $Banner $Dialog
 
-$Msi = Join-Path $Dist "craft-anything-$Version-windows-$Arch.msi"
+$Msi = Join-Path $Dist "buildflow-$Version-windows-$Arch.msi"
 & (Join-Path $PSScriptRoot 'check-icons.ps1')
 Invoke-Native 'wix build' {
   wix build (Join-Path $PSScriptRoot 'craft-anything.wxs') -arch $Arch `
@@ -154,7 +154,7 @@ Remove-Item -Force -ErrorAction SilentlyContinue ([IO.Path]::ChangeExtension($Ms
 & (Join-Path $PSScriptRoot 'sign.ps1') $Msi
 
 # ---- portable zip ------------------------------------------------------------------------------
-$Portable = Join-Path $TargetDir "windows-package\craft-anything-$Version-windows-$Arch-portable"
+$Portable = Join-Path $TargetDir "windows-package\buildflow-$Version-windows-$Arch-portable"
 Remove-Item -Recurse -Force $Portable -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force -Path $Portable | Out-Null
 Copy-Item (Join-Path $Stage '*.exe') $Portable
@@ -171,7 +171,7 @@ if ($env:CRAFT_FONTS_DIR) {
 # portable.txt beside craft-anything.exe switches on portable mode: settings, logs and the engine
 # store go to CraftAnythingData\ next to the exe instead of %APPDATA% (crates/engine/src/settings.rs).
 Copy-Item (Join-Path $PSScriptRoot 'portable.txt') $Portable
-$Zip = Join-Path $Dist "craft-anything-$Version-windows-$Arch-portable.zip"
+$Zip = Join-Path $Dist "buildflow-$Version-windows-$Arch-portable.zip"
 Remove-Item -Force $Zip -ErrorAction SilentlyContinue
 Compress-Archive -Path $Portable -DestinationPath $Zip
 

@@ -72,7 +72,7 @@ pub fn install(
     }
     let engine = crate::engine(engine_id).ok_or_else(|| {
         ToolError::new(ErrorCode::NotSupported, format!("There is no engine called {engine_id:?}."))
-            .with_remediation("See Settings → Engines for the engines Craft Anything knows.")
+            .with_remediation("See Settings → Engines for the engines Buildflow knows.")
     })?;
     let pins = match engine.install {
         Install::Pinned(pins) => pins,
@@ -80,7 +80,7 @@ pub fn install(
             return Err(ToolError::new(ErrorCode::NotSupported, format!("{} is installed by its own setup, not here.", engine.name)).with_remediation(how));
         }
         Install::Manual => {
-            return Err(ToolError::new(ErrorCode::NotSupported, format!("Craft Anything doesn't install {} for you.", engine.name))
+            return Err(ToolError::new(ErrorCode::NotSupported, format!("Buildflow doesn't install {} for you.", engine.name))
                 .with_remediation("Install it by hand and set its path in Settings → Engines."));
         }
     };
@@ -276,7 +276,7 @@ pub fn download_to(
 fn status_error(status: u16, url: &str) -> ToolError {
     let remediation = match status {
         429 | 500..=599 => "The download server is busy or having trouble. Try again in a few minutes.",
-        404 | 410 => "The file isn't at its usual address any more. Please report this so Craft Anything can be updated.",
+        404 | 410 => "The file isn't at its usual address any more. Please report this so Buildflow can be updated.",
         _ => "Try again later. If it keeps happening, please report it.",
     };
     ToolError::new(ErrorCode::EngineMissing, format!("The download server answered {status} for {url}.")).with_remediation(remediation)

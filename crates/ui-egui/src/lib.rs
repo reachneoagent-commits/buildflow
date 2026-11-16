@@ -1,4 +1,4 @@
-//! The Craft Anything egui interface: Simple mode (make something from a prompt, or ask about a
+//! The Buildflow egui interface: Simple mode (make something from a prompt, or ask about a
 //! target) and Advanced mode (the full workbench). Both drive the same engine.
 //!
 //! Threading: the UI thread never waits. Engine tools, AI detection, file dialogs and file writes
@@ -15,6 +15,7 @@ pub mod detect_tabs;
 pub mod engine_ui;
 pub mod evidence_ui;
 pub mod first_run;
+pub mod flow_theme;
 pub mod folders;
 pub mod game_files;
 pub mod glossary;
@@ -1485,7 +1486,7 @@ impl CraftApp {
         if self.headless {
             return;
         }
-        let name = self.view.active_target().map(|t| format!("{} report.md", t.name)).unwrap_or_else(|| "Craft Anything report.md".into());
+        let name = self.view.active_target().map(|t| format!("{} report.md", t.name)).unwrap_or_else(|| "Buildflow report.md".into());
         let engine = self.engine.clone();
         #[cfg(not(target_arch = "wasm32"))]
         self.jobs.spawn("Export report", true, move |_| {

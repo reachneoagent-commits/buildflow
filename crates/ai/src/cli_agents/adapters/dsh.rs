@@ -146,7 +146,7 @@ fn overlay_yaml(mcp: &McpCommand) -> String {
     let q = |s: &str| format!("'{}'", s.replace('\'', "''"));
     let args: String = mcp.args.iter().map(|a| format!("\n          - {}", q(a))).collect();
     format!(
-        "# Craft Anything's tool server for this run. Generated; safe to delete.\n\
+        "# Buildflow's tool server for this run. Generated; safe to delete.\n\
          - insert:\n    \
            - id: {OVERLAY_ID}\n      \
              name: '@deepseek-ai/dsh-mcp-client'\n      \
@@ -167,7 +167,7 @@ mod tests {
     /// A tool server command for a run's project.
     fn mcp() -> McpCommand {
         McpCommand {
-            command: r"C:\Program Files\Craft Anything\craft-anything-cli.exe".into(),
+            command: r"C:\Program Files\Buildflow\craft-anything-cli.exe".into(),
             args: vec!["mcp".into(), "--project".into(), r"C:\w\p\investigation.cany".into()],
             notes: None,
         }

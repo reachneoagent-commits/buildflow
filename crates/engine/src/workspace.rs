@@ -139,9 +139,9 @@ pub fn read_manifest(bytes: &[u8]) -> Result<Manifest, ToolError> {
     if found > MANIFEST_VERSION {
         return serde_json::from_value(doc).map_err(|e| {
             ToolError::unsupported(format!(
-                "This project was made by a newer Craft Anything (craft.json version {found}; this one reads up to {MANIFEST_VERSION}) and can't be read: {e}"
+                "This project was made by a newer Buildflow (craft.json version {found}; this one reads up to {MANIFEST_VERSION}) and can't be read: {e}"
             ))
-            .with_remediation("Update Craft Anything to open it.")
+            .with_remediation("Update Buildflow to open it.")
         });
     }
     let reached = upgrade(&mut doc, found, 0, MANIFEST_STEPS).map_err(|e| ToolError::invalid(format!("it couldn't be brought up to date: {e}")))?;
@@ -605,12 +605,12 @@ impl ProjectUsage {
         std::fs::read(root.join(USAGE_FILE)).ok().and_then(|b| serde_json::from_slice(&b).ok()).unwrap_or_default()
     }
 
-    /// Change the saved usage (the run's job). A file from a newer Craft Anything is left alone.
+    /// Change the saved usage (the run's job). A file from a newer Buildflow is left alone.
     pub fn update(root: &Path, f: impl FnOnce(&mut ProjectUsage)) -> Result<(), ToolError> {
         let _updating = USAGE_UPDATE.lock().unwrap_or_else(PoisonError::into_inner);
         let mut u = ProjectUsage::load(root);
         if u.version > USAGE_VERSION {
-            return Err(ToolError::unsupported(format!("{USAGE_FILE} was written by a newer Craft Anything, so it isn't changed.")));
+            return Err(ToolError::unsupported(format!("{USAGE_FILE} was written by a newer Buildflow, so it isn't changed.")));
         }
         f(&mut u);
         u.version = USAGE_VERSION;
@@ -755,7 +755,7 @@ impl Workspace {
         Ok(copy)
     }
 
-    /// Delete the project: everything Craft Anything made in its folder (its records, checks and
+    /// Delete the project: everything Buildflow made in its folder (its records, checks and
     /// what was built in app/). The person's own files stay: an app edited in place, and the
     /// files a project started from. A folder left empty is removed. This can't be undone.
     pub fn delete(self) -> Result<(), ToolError> {
@@ -805,11 +805,11 @@ impl Workspace {
                 let clash = clashes(folder, existing);
                 if !clash.is_empty() {
                     return Err(ToolError::invalid(format!(
-                        "{} already has {}, which Craft Anything would keep its own files in.",
+                        "{} already has {}, which Buildflow would keep its own files in.",
                         folder.display(),
                         clash.join(", ")
                     ))
-                    .with_remediation("Pick another folder, or move those out of it first; Craft Anything never replaces your files."));
+                    .with_remediation("Pick another folder, or move those out of it first; Buildflow never replaces your files."));
                 }
                 manifest.app_in_root = existing == ExistingFiles::Edit;
                 manifest.start_files = names;
@@ -828,7 +828,7 @@ impl Workspace {
         Ok(Workspace { root: root.to_path_buf(), manifest })
     }
 
-    /// Made by a newer Craft Anything: it can be looked at but not changed (saving is refused, so
+    /// Made by a newer Buildflow: it can be looked at but not changed (saving is refused, so
     /// fields this build doesn't know are never lost).
     pub fn is_read_only(&self) -> bool {
         self.manifest.version > MANIFEST_VERSION
@@ -865,10 +865,10 @@ impl Workspace {
     fn write_manifest(&self, m: &Manifest) -> Result<(), ToolError> {
         if self.is_read_only() {
             return Err(ToolError::unsupported(format!(
-                "{} was made by a newer Craft Anything (craft.json version {}), so this one doesn't change it.",
+                "{} was made by a newer Buildflow (craft.json version {}), so this one doesn't change it.",
                 self.manifest.name, self.manifest.version
             ))
-            .with_remediation("Update Craft Anything to keep working on this project. Nothing was written."));
+            .with_remediation("Update Buildflow to keep working on this project. Nothing was written."));
         }
         let bytes = serde_json::to_vec_pretty(m).map_err(|e| ToolError::internal(e.to_string()))?;
         write_atomic(&self.root.join(MANIFEST), &bytes)
@@ -897,7 +897,7 @@ impl Workspace {
         if self.manifest.app_in_root { "the project folder" } else { "app/" }
     }
 
-    /// One of Craft Anything's own records in this project (the manifest, the feed, the inbox,
+    /// One of Buildflow's own records in this project (the manifest, the feed, the inbox,
     /// the person's pictures…), which the builder never changes, even when the app is the
     /// project folder itself. checks/ isn't one: the builder keeps its notes there.
     pub fn is_own_record(&self, p: &Path) -> bool {
@@ -1012,7 +1012,7 @@ impl Workspace {
 /// The coding agent's session, copied into the project ([`Workspace::agent_session_path`]).
 pub const AGENT_SESSION_FILE: &str = "agent-session.jsonl";
 
-/// The names Craft Anything keeps in a project folder beside app/. A folder the person picks
+/// The names Buildflow keeps in a project folder beside app/. A folder the person picks
 /// mustn't already have any of them.
 pub const OWN_NAMES: &[&str] = &[
     MANIFEST,
@@ -1087,7 +1087,7 @@ pub const START_FILES_SHOWN: usize = 40;
 pub enum FolderState {
     /// Missing or empty: the project starts there as usual.
     Empty,
-    /// Already a Craft Anything project.
+    /// Already a Buildflow project.
     Project,
     /// The person's files: the first names (sorted, at most [`START_FILES_SHOWN`]) and how many.
     HasFiles { names: Vec<String>, count: usize },
@@ -1118,7 +1118,7 @@ pub enum ActionKind {
     Publish,
     /// Deleting anything outside the project or the temp folder.
     DeleteOutside,
-    /// Changing the system, its settings or users, system files, or Craft Anything's own records.
+    /// Changing the system, its settings or users, system files, or Buildflow's own records.
     System,
     /// Tools with no rule of their own.
     OtherTools,
@@ -1177,7 +1177,7 @@ pub const ACTION_KINDS: &[KindRow] = &[
     KindRow {
         kind: ActionKind::System,
         name: "system",
-        what: "changing the system, its settings or users, system files, or Craft Anything's own records",
+        what: "changing the system, its settings or users, system files, or Buildflow's own records",
         auto: Approval::Refuse,
         manual: Approval::Ask,
     },
@@ -1244,7 +1244,7 @@ pub enum ExistingFiles {
     StartFrom,
 }
 
-/// What's already in `folder` under a name Craft Anything would keep its own files in (app/ too
+/// What's already in `folder` under a name Buildflow would keep its own files in (app/ too
 /// when the app goes beside the person's files). A project can start there only when it's empty.
 pub fn clashes(folder: &Path, existing: ExistingFiles) -> Vec<&'static str> {
     OWN_NAMES.iter().copied().chain((existing == ExistingFiles::StartFrom).then_some("app")).filter(|n| folder.join(n).exists()).collect()
@@ -1350,7 +1350,7 @@ pub fn attachable_picture(p: &Path) -> bool {
 /// Where pictures pasted from the clipboard wait until their message is sent: this person's own
 /// cache folder (never a temp folder other users can read).
 pub fn pasted_dir() -> PathBuf {
-    dirs::cache_dir().or_else(|| dirs::home_dir().map(|h| h.join(".cache"))).unwrap_or_else(std::env::temp_dir).join("Craft Anything").join("pasted")
+    dirs::cache_dir().or_else(|| dirs::home_dir().map(|h| h.join(".cache"))).unwrap_or_else(std::env::temp_dir).join("Buildflow").join("pasted")
 }
 
 /// Save a picture pasted from the clipboard (8-bit RGBA, `width`×`height`) as `pasted-<time>-<n>.png`
@@ -1409,9 +1409,9 @@ fn forget_old_pastes(dir: &Path, keep: &[PathBuf]) {
     }
 }
 
-/// The default projects folder: `Documents/Craft Anything`, else `~/Craft Anything`.
+/// The default projects folder: `Documents/Buildflow`, else `~/Buildflow`.
 pub fn default_projects_dir() -> PathBuf {
-    dirs::document_dir().or_else(dirs::home_dir).unwrap_or_else(|| PathBuf::from(".")).join("Craft Anything")
+    dirs::document_dir().or_else(dirs::home_dir).unwrap_or_else(|| PathBuf::from(".")).join("Buildflow")
 }
 
 #[cfg(test)]
@@ -1761,7 +1761,7 @@ mod tests {
         std::fs::write(dir.path().join(MANIFEST), r#"{"version": 7, "name": {"parts": []}}"#).unwrap();
         let err = Workspace::open(dir.path()).unwrap_err();
         assert_eq!(err.code, ErrorCode::NotSupported);
-        assert!(err.message.contains("newer Craft Anything") && err.remediation.is_some());
+        assert!(err.message.contains("newer Buildflow") && err.remediation.is_some());
     }
 
     #[test]
@@ -2040,7 +2040,7 @@ mod tests {
         ws.delete().unwrap();
         assert!(!d.path().join("snake").exists(), "a project of its own goes with its folder");
 
-        // An app edited in place: Craft Anything's records go, the person's files stay.
+        // An app edited in place: Buildflow's records go, the person's files stay.
         let mine = d.path().join("mine");
         std::fs::create_dir_all(&mine).unwrap();
         std::fs::write(mine.join("index.html"), "<p>hi</p>").unwrap();

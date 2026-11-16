@@ -1541,10 +1541,7 @@ pub fn can_continue(app: &CraftApp, ws: &Workspace) -> bool {
 fn continue_card(app: &mut CraftApp, ui: &mut Ui, ws: &Workspace) {
     let t = Tokens::get(ui.ctx());
     let (title, body) = if interrupted(app, ws) {
-        (
-            "This build stopped part-way",
-            "Craft Anything or the computer closed while it was working. Everything so far is kept; Continue picks up where it stopped.",
-        )
+        ("This build stopped part-way", "Buildflow or the computer closed while it was working. Everything so far is kept; Continue picks up where it stopped.")
     } else {
         ("Paused", "Everything so far is kept. Continue picks up where it stopped.")
     };

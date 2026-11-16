@@ -74,9 +74,9 @@ pub fn doctor(host: &Host, req: &DoctorRequest) -> DoctorReport {
     let cli = req.cli_path.clone().or_else(craft_anything_platform::self_cli_path);
     match &cli {
         Some(p) if p.is_file() => checks.push(Check::new("binary", CheckStatus::Ok, format!("craft-anything-cli is at {}", p.display()))),
-        Some(p) => checks.push(Check::new("binary", CheckStatus::Fail, format!("{} does not exist.", p.display())).fix("Reinstall Craft Anything.")),
+        Some(p) => checks.push(Check::new("binary", CheckStatus::Fail, format!("{} does not exist.", p.display())).fix("Reinstall Buildflow.")),
         None => checks.push(
-            Check::new("binary", CheckStatus::Fail, "craft-anything-cli was not found.").fix("Install Craft Anything; the CLI ships next to the desktop app."),
+            Check::new("binary", CheckStatus::Fail, "craft-anything-cli was not found.").fix("Install Buildflow; the CLI ships next to the desktop app."),
         ),
     }
     let on_path = craft_anything_platform::which_all("craft-anything-cli");
@@ -135,9 +135,9 @@ pub fn doctor(host: &Host, req: &DoctorRequest) -> DoctorReport {
                     if path.components().count() == 1 { craft_anything_platform::which(&p).is_some() } else { path.is_file() }
                 });
                 if config::is_disabled(c, &text) {
-                    Check::new(name, CheckStatus::Warn, format!("{} lists Craft Anything as disabled.", c.display)).fix(setup_cmd)
+                    Check::new(name, CheckStatus::Warn, format!("{} lists Buildflow as disabled.", c.display)).fix(setup_cmd)
                 } else if config::entry_turned_off(c, &text) {
-                    Check::new(name, CheckStatus::Warn, format!("{} has Craft Anything turned off (enabled = false).", c.display))
+                    Check::new(name, CheckStatus::Warn, format!("{} has Buildflow turned off (enabled = false).", c.display))
                         .fix(format!("Set enabled = true (or remove it) under [mcp_servers.craft-anything] in {}.", c.config.display()))
                 } else if !program_ok {
                     Check::new(name, CheckStatus::Fail, format!("{} points to a craft-anything-cli that no longer exists.", c.display)).fix(setup_cmd)
@@ -155,9 +155,9 @@ pub fn doctor(host: &Host, req: &DoctorRequest) -> DoctorReport {
     for d in &skill_dirs {
         let name = format!("skill:{}", d.display());
         checks.push(match skill::inspect(d) {
-            SkillState::Current => Check::new(name, CheckStatus::Ok, "The Craft Anything skill is installed and current."),
-            SkillState::Outdated => Check::new(name, CheckStatus::Warn, "The Craft Anything skill is out of date.").fix("craft-anything-cli setup --yes"),
-            SkillState::Missing => Check::new(name, CheckStatus::Info, "The Craft Anything skill isn't installed here.").fix("craft-anything-cli setup --yes"),
+            SkillState::Current => Check::new(name, CheckStatus::Ok, "The Buildflow skill is installed and current."),
+            SkillState::Outdated => Check::new(name, CheckStatus::Warn, "The Buildflow skill is out of date.").fix("craft-anything-cli setup --yes"),
+            SkillState::Missing => Check::new(name, CheckStatus::Info, "The Buildflow skill isn't installed here.").fix("craft-anything-cli setup --yes"),
             SkillState::Foreign => Check::new(name, CheckStatus::Warn, "Another skill uses the craft-anything folder name."),
         });
     }

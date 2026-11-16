@@ -1,0 +1,95 @@
+name: Upstream check
+
+# Once a week: is there a Craft Anything release newer than the one Buildflow is built on
+# (rebrand/upstream.json)? If so, try the merge and the rebrand in this scratch checkout and open or
+# update an issue with the result. Nothing here changes Buildflow or ships to anyone: a person does
+# the merge (docs/UPSTREAM.md), tests it and releases.
+
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compare with upstream's newest release
+        id: cmp
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="$(python3 -c 'import json;print(json.load(open("rebrand/upstream.json"))["repo"])')"
+          OURS="$(python3 -c 'import json;print(json.load(open("rebrand/upstream.json"))["tag"])')"
+          THEIRS="$(gh api "repos/$REPO/releases/latest" --jq .tag_name)"
+          echo "repo=$REPO" >> "$GITHUB_OUTPUT"
+          echo "ours=$OURS" >> "$GITHUB_OUTPUT"
+          echo "theirs=$THEIRS" >> "$GITHUB_OUTPUT"
+          if [ "$OURS" = "$THEIRS" ]; then echo "new=0" >> "$GITHUB_OUTPUT"; else echo "new=1" >> "$GITHUB_OUTPUT"; fi
+          echo "Buildflow is on $OURS; upstream's newest release is $THEIRS"
+      - name: Try the merge and the rebrand
+        if: steps.cmp.outputs.new == '1'
+        env:
+          REPO: ${{ steps.cmp.outputs.repo }}
+          OURS: ${{ steps.cmp.outputs.ours }}
+          THEIRS: ${{ steps.cmp.outputs.theirs }}
+        run: |
+          set -uo pipefail
+          git config user.email ci@example.invalid
+          git config user.name ci
+          git remote add upstream "https://github.com/$REPO.git"
+          git fetch --quiet upstream "refs/tags/$THEIRS:refs/tags/upstream/$THEIRS"
+          {
+            echo "Upstream released **$THEIRS**; Buildflow is built on **$OURS**."
+            echo
+            echo "Release notes: https://github.com/$REPO/releases/tag/$THEIRS"
+            echo
+            echo "## Trial merge"
+            if git merge --no-commit --no-ff "refs/tags/upstream/$THEIRS" >/dev/null 2>&1; then
+              echo "Merges cleanly."
+            else
+              echo "Conflicts (expected for files the rebrand edits; see docs/UPSTREAM.md):"
+              git diff --name-only --diff-filter=U | sed 's/^/- `/; s/$/`/'
+              # Do what docs/UPSTREAM.md says, so the rebrand below runs on upstream's text.
+              git diff --name-only --diff-filter=U | while read -r f; do
+                case "$f" in
+                  README.md | .github/workflows/*) git checkout --ours -- "$f" 2>/dev/null || git rm -q --cached "$f" ;;
+                  *) git checkout --theirs -- "$f" 2>/dev/null || git rm -q -f "$f" ;;
+                esac
+              done
+            fi
+            echo
+            echo "## Rebrand on the merged tree"
+            echo '```'
+            python3 rebrand/apply.py 2>&1 | tail -30
+            echo '```'
+            if python3 rebrand/apply.py --check >/dev/null 2>&1; then
+              echo "The rebrand applied in full."
+            else
+              echo "**The rebrand needs attention**: a line it edits changed upstream. Update \`rebrand/apply.py\`."
+            fi
+            echo
+            echo "Next: follow \"Merging an upstream release\" in docs/UPSTREAM.md."
+          } > report.md
+          cat report.md
+      - name: Open or update the review issue
+        if: steps.cmp.outputs.new == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LABEL="upstream-release"
+          gh label create "$LABEL" --color D1FB8C --description "A new upstream release to merge" 2>/dev/null || true
+          EXISTING="$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number')"
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file report.md
+          else
+            gh issue create --title "Upstream release ${{ steps.cmp.outputs.theirs }} to merge" --label "$LABEL" --body-file report.md
+          fi
