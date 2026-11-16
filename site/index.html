@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buildflow: see how software works, then build your own</title>
+<meta name="description" content="Buildflow studies a website, app or game and has AI build your own version, using the AI you already have. Free and open source, for Mac and Windows.">
+<meta property="og:title" content="Buildflow">
+<meta property="og:description" content="See how a website, app or game works, then have AI build your own version, with the AI you already have.">
+<meta property="og:image" content="https://reachneoagent-commits.github.io/buildflow/welcome.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --lime: #d1fb8c; --ink: #100e0a; --paper: #f4f5f7; --mist: #dce1e1;
+    --card: #1a1814; --line: #34322d; --dim: #b3b3b2;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--ink); color: var(--paper);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  }
+  a { color: var(--lime); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; color: var(--paper); text-decoration: none; }
+  .brand svg { width: 22px; height: 28px; }
+  nav a { color: var(--dim); text-decoration: none; margin-left: 22px; font-size: 15px; }
+  nav a:hover { color: var(--paper); }
+  .hero { text-align: center; padding: 56px 0 40px; }
+  .tag { display: inline-block; border: 1px solid var(--line); color: var(--dim); border-radius: 999px; padding: 4px 14px; font-size: 13px; }
+  h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.08; letter-spacing: -0.02em; margin: 22px auto 18px; max-width: 16ch; }
+  h1 em { font-style: normal; color: var(--lime); }
+  .lead { color: var(--dim); font-size: clamp(17px, 2.2vw, 20px); max-width: 60ch; margin: 0 auto 30px; }
+  .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 13px 22px; border-radius: 10px; font-weight: 600; text-decoration: none; }
+  .btn.main { background: var(--lime); color: var(--ink); }
+  .btn.main:hover { background: #e0fdb0; }
+  .btn.ghost { border: 1px solid var(--line); color: var(--paper); }
+  .btn.ghost:hover { border-color: var(--dim); }
+  .note { color: var(--dim); font-size: 14px; margin-top: 16px; }
+  .shot { margin: 44px 0 0; }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); }
+  section { padding: 64px 0 0; }
+  h2 { font-size: clamp(24px, 3.4vw, 32px); letter-spacing: -0.01em; margin: 0 0 8px; }
+  .sub { color: var(--dim); margin: 0 0 28px; max-width: 64ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .card .n { color: var(--lime); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; }
+  .card h3 { margin: 6px 0 6px; font-size: 19px; }
+  .card p { margin: 0; color: var(--dim); font-size: 15.5px; }
+  .rows { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; padding: 16px 22px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .row span:last-child { color: var(--dim); }
+  .care { background: var(--lime); color: var(--ink); border-radius: 14px; padding: 26px; }
+  .care h2 { margin-bottom: 6px; }
+  .care p { margin: 0; max-width: 70ch; }
+  footer { color: var(--dim); font-size: 14px; padding: 56px 0 48px; }
+  footer p { margin: 0 0 8px; max-width: 80ch; }
+  @media (max-width: 560px) {
+    nav a.hide { display: none; }
+    .row { grid-template-columns: 1fr; gap: 2px; }
+    .hero { padding-top: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="brand" href="./">
+      <svg viewBox="0 0 34.49 43.94" aria-hidden="true"><g fill="#d1fb8c"><path d="M22.02,18.98c-.08,0-.17,0-.25,0v24.95c.08,0,.17,0,.25,0,6.89,0,12.48-5.59,12.48-12.48s-5.59-12.48-12.48-12.48Z"/><path d="M9.54,31.46c0-6.81,5.45-12.34,12.23-12.47V0C9.74,0,0,9.74,0,21.77v.41c0,12.02,9.74,21.77,21.77,21.77h0c-6.78-.14-12.23-5.67-12.23-12.48Z"/></g></svg>
+      Buildflow
+    </a>
+    <nav>
+      <a class="hide" href="#how">How it works</a>
+      <a class="hide" href="#ai">Your AI</a>
+      <a href="https://github.com/reachneoagent-commits/buildflow">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <span class="tag">Part of FlowApps · Mac and Windows · Free and open source</span>
+    <h1>See how it works. Then <em>build your own.</em></h1>
+    <p class="lead">Point Buildflow at a website, an app or a game. It studies the original, has AI build a new project from what it learned, and checks the result against the original.</p>
+    <div class="buttons">
+      <a class="btn main" href="https://github.com/reachneoagent-commits/buildflow/releases/latest">Download Buildflow</a>
+      <a class="btn ghost" href="https://github.com/reachneoagent-commits/FlowApps-Launcher/releases/latest">Get it with the FlowApps launcher</a>
+    </div>
+    <p class="note">Early alpha. Not signed with a paid certificate, so your computer warns you the first time you open it.</p>
+    <div class="shot"><img src="welcome.png" width="1353" height="854" alt="Buildflow's welcome screen, with a choice between a guided mode and a full workbench"></div>
+  </div>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="sub">Three steps, repeated until the build is ready.</p>
+    <div class="grid">
+      <div class="card"><div class="n">01 · STUDY</div><h3>Look at the original</h3><p>Buildflow inspects a website, app, game or file with real tools and keeps evidence for what it finds.</p></div>
+      <div class="card"><div class="n">02 · BUILD</div><h3>Make a new project</h3><p>An AI builds your version in the language or framework you ask for, from what the study found.</p></div>
+      <div class="card"><div class="n">03 · CHECK</div><h3>Compare and refine</h3><p>It compares the build with the original, such as a website's pages at three screen widths, and fixes what's off.</p></div>
+    </div>
+  </section>
+
+  <section id="ai">
+    <h2>Use the AI you already have</h2>
+    <p class="sub">Add it once in Settings. Keys stay in your computer's keychain.</p>
+    <div class="rows">
+      <div class="row"><span>A Claude, OpenAI, Gemini or OpenRouter key</span><span>Pick the provider and paste the key</span></div>
+      <div class="row"><span>An NVIDIA NIM key</span><span>Pick NVIDIA NIM</span></div>
+      <div class="row"><span>A model on your computer or network: Ollama, LM Studio, llama.cpp, vLLM</span><span>Pick the local server option and enter its address</span></div>
+      <div class="row"><span>Claude Code, Codex, Copilot, Gemini CLI, OpenCode or Hermes Agent installed</span><span>Pick it as an agent app</span></div>
+    </div>
+    <p class="note">Building works best with a strong model. Small local models can answer questions about a target but often can't finish a build.</p>
+  </section>
+
+  <section>
+    <div class="grid">
+      <div class="card"><h3>Two ways to use it</h3><p>A guided mode in plain words, or a full workbench with every tool for people who want the details.</p></div>
+      <div class="card"><h3>Clean room by default</h3><p>It only looks at the original from the outside, the way a visitor or user would. Looking inside programs is off unless you turn it on.</p></div>
+      <div class="card"><h3>Runs on your computer</h3><p>A native app for Mac and Windows. Nothing goes anywhere except to the AI you choose.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="care">
+      <h2>Use it well</h2>
+      <p>Only study and rebuild things you have the right to. Building your own version of how something works is not the same as copying its code, artwork, name or content: those belong to their owners.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Buildflow is built on <a href="https://github.com/storytold/craft-anything">Craft Anything</a>, copyright the ArtCraft Team and the Craft Anything contributors, used under the MIT or Apache-2.0 license. Buildflow is not affiliated with or endorsed by the ArtCraft Team.</p>
+    <p><a href="https://github.com/reachneoagent-commits/buildflow">Source</a> · <a href="https://github.com/reachneoagent-commits/buildflow/releases">Releases</a> · <a href="https://github.com/reachneoagent-commits/buildflow/issues">Report a problem</a></p>
+  </footer>
+</div>
+</body>
+</html>

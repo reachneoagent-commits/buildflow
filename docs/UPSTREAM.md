@@ -18,7 +18,8 @@ version of any conflicted file and re-apply our changes in one step.
 | `brand/` (logo, colours, `.ai` source) | `assets/app-icon/` (file names theirs, artwork ours: `rebrand/icons.sh`) |
 | `crates/ui-egui/src/flow_theme.rs` (all our colours) | `Cargo.toml`, `CLAUDE.md`, `NOTICE`, `.gitattributes` |
 | `docs/UPSTREAM.md`, `README.md` | |
-| `.github/workflows/release.yml`, `upstream-check.yml` | |
+| `.github/workflows/release.yml`, `upstream-check.yml`, `pages.yml` | |
+| `site/` (the GitHub Pages site) | |
 
 What the script changes, in short: the display name (Craft Anything → Buildflow) wherever it is
 shown, the bundle id, the settings folder (`buildflow`, so the two apps never share files), the
