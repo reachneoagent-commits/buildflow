@@ -143,6 +143,10 @@ def installers() -> None:
     mac = "packaging/macos/package.sh"
     edit(mac, r"craft-anything-\$VERSION-macos", f"{APP_ID}-$VERSION-macos", f"{APP_ID}-$VERSION-macos")
     edit(mac, r"craft-anything-cli-\$VERSION-macos", f"{APP_ID}-cli-$VERSION-macos", f"{APP_ID}-cli-$VERSION-macos")
+    edit(mac, r'"/craft-anything\*-"\$VERSION"', f'"/{APP_ID}*-"$VERSION"', f'"/{APP_ID}*-"$VERSION"')
+    ver = "packaging/macos/verify.sh"
+    edit(ver, r"craft-anything-\$VERSION-macos", f"{APP_ID}-$VERSION-macos", f"{APP_ID}-$VERSION-macos")
+    edit(ver, r"craft-anything-cli-\$VERSION-macos", f"{APP_ID}-cli-$VERSION-macos", f"{APP_ID}-cli-$VERSION-macos")
     win = "packaging/windows/package.ps1"
     edit(win, r"craft-anything-\$Version-windows", f"{APP_ID}-$Version-windows", f"{APP_ID}-$Version-windows")
     edit(win, r"craft-anything-<version>-windows", f"{APP_ID}-<version>-windows", f"{APP_ID}-<version>-windows")

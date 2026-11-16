@@ -216,4 +216,4 @@ fi
 
 "$WORK/bin/craft-anything" --version
 echo "==> done (check the artifacts as shipped with packaging/macos/verify.sh --arch $ARCH)"
-ls -lh "$DIST"/craft-anything*-"$VERSION"-macos-"$ARCH".*
+ls -lh "$DIST"/buildflow*-"$VERSION"-macos-"$ARCH".*
