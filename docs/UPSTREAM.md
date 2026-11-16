@@ -94,5 +94,7 @@ adds a fourth part to the release tag only if we ever need one; so far we don't.
 ## Releasing
 
 Actions → Release → Run workflow builds the macOS DMG and the Windows MSI and portable zip and
-publishes a GitHub release. Builds are not signed with a paid certificate. The FlowApps launcher
+publishes a GitHub release. Builds are not signed with a paid certificate. After a release with a new
+version number, update the download links in `README.md` and `site/index.html`, which name the
+version (`v0.6.1/buildflow-0.6.1-…`). The FlowApps launcher
 installs and updates Buildflow from those releases.

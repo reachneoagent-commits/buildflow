@@ -45,13 +45,18 @@ works is not the same as copying its code, artwork, name or content: those belon
 
 **Easiest:** install and update Buildflow with the
 [FlowApps launcher](https://github.com/reachneoagent-commits/FlowApps-Launcher/releases/latest).
-Or pick a file from the [latest release](https://github.com/reachneoagent-commits/buildflow/releases/latest):
+Or download an installer yourself:
 
-| Platform | File |
+| Platform | Installer |
 |---|---|
-| macOS (Apple silicon and Intel) | `buildflow-<version>-macos-universal.dmg` |
-| Windows x64 or ARM64 | `buildflow-<version>-windows-<arch>.msi` |
-| Windows, no install | `buildflow-<version>-windows-<arch>-portable.zip` |
+| Windows x64 | [Installer](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-x64.msi) · [portable zip](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-x64-portable.zip) |
+| Windows ARM64 | [Installer](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-arm64.msi) · [portable zip](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-arm64-portable.zip) |
+| macOS Apple Silicon (M1 or newer) | [DMG](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-macos-universal.dmg) |
+| macOS Intel | [DMG](https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-macos-universal.dmg) |
+
+Both Mac links are the same file: one DMG runs on Apple silicon and Intel. Older versions are on the
+[Releases page](https://github.com/reachneoagent-commits/buildflow/releases), and every release has a
+`SHA256SUMS.txt` to check the files against.
 
 The app is not code-signed with a paid certificate, so macOS and Windows warn you the first time
 you open it.

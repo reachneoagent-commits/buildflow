@@ -53,6 +53,8 @@
   .row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; padding: 16px 22px; border-top: 1px solid var(--line); }
   .row:first-child { border-top: 0; }
   .row span:last-child { color: var(--dim); }
+  .row.head { font-weight: 700; background: var(--card); }
+  .row.head span:last-child { color: var(--paper); }
   .care { background: var(--lime); color: var(--ink); border-radius: 14px; padding: 26px; }
   .care h2 { margin-bottom: 6px; }
   .care p { margin: 0; max-width: 70ch; }
@@ -84,7 +86,7 @@
     <h1>See how it works. Then <em>build your own.</em></h1>
     <p class="lead">Point Buildflow at a website, an app or a game. It studies the original, has AI build a new project from what it learned, and checks the result against the original.</p>
     <div class="buttons">
-      <a class="btn main" href="https://github.com/reachneoagent-commits/buildflow/releases/latest">Download Buildflow</a>
+      <a class="btn main" href="#download">Download Buildflow</a>
       <a class="btn ghost" href="https://github.com/reachneoagent-commits/FlowApps-Launcher/releases/latest">Get it with the FlowApps launcher</a>
     </div>
     <p class="note">Early alpha. Not signed with a paid certificate, so your computer warns you the first time you open it.</p>
@@ -119,6 +121,19 @@
       <div class="card"><h3>Clean room by default</h3><p>It only looks at the original from the outside, the way a visitor or user would. Looking inside programs is off unless you turn it on.</p></div>
       <div class="card"><h3>Runs on your computer</h3><p>A native app for Mac and Windows. Nothing goes anywhere except to the AI you choose.</p></div>
     </div>
+  </section>
+
+  <section id="download">
+    <h2>Download</h2>
+    <p class="sub">Version 0.6.1. The easiest way to install and stay up to date is the <a href="https://github.com/reachneoagent-commits/FlowApps-Launcher/releases/latest">FlowApps launcher</a>.</p>
+    <div class="rows">
+      <div class="row head"><span>Platform</span><span>Installer</span></div>
+      <div class="row"><span>Windows x64</span><span><a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-x64.msi">Installer</a> · <a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-x64-portable.zip">portable zip</a></span></div>
+      <div class="row"><span>Windows ARM64</span><span><a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-arm64.msi">Installer</a> · <a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-windows-arm64-portable.zip">portable zip</a></span></div>
+      <div class="row"><span>macOS Apple Silicon (M1 or newer)</span><span><a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-macos-universal.dmg">DMG</a></span></div>
+      <div class="row"><span>macOS Intel</span><span><a href="https://github.com/reachneoagent-commits/buildflow/releases/download/v0.6.1/buildflow-0.6.1-macos-universal.dmg">DMG</a></span></div>
+    </div>
+    <p class="note">Both Mac links are the same file: one DMG runs on Apple silicon and Intel. Older versions and checksums are on the <a href="https://github.com/reachneoagent-commits/buildflow/releases">Releases page</a>.</p>
   </section>
 
   <section>
