@@ -16,3 +16,6 @@ corpus/
 *.pfx
 *.key
 .claude/settings.local.json
+
+# Brand sources are kept outside the repo
+/brand/
