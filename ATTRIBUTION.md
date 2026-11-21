@@ -28,6 +28,12 @@ texts are in the crate's `fonts/` folder.
 | `Hack-Regular.ttf` | Hack (egui's default monospace font) | © 2018 Source Foundry Authors; Bitstream Vera © 2003 Bitstream, Inc.; DejaVu changes public domain | MIT and Bitstream Vera License, `Hack-Regular.txt` |
 | `emoji-icon-font.ttf` | emoji-icon-font | © 2014 John Slegers | MIT, `emoji-icon-font-mit-license.txt` |
 
+## README header (`assets/header-*.png`)
+
+| Files | What | Copyright | Licence |
+|---|---|---|---|
+| `header-dark.png`, `header-light.png` | Buildflow mark and name | © Reach Neo | Trademark of Reach Neo |
+
 ## Icons (`assets/icons/`)
 
 | Files | Set | Copyright | Source | Licence |
