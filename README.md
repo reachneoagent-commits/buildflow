@@ -1,8 +1,9 @@
-<p align="center">
-  <img src="assets/app-icon/hicolor/256x256/apps/ai.storyteller.craft-anything.png" width="128" height="128" alt="Buildflow icon">
+<p align="left">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.png">
+    <img src="assets/header-light.png" width="600" height="160" alt="Buildflow logo and name">
+  </picture>
 </p>
-
-<h1 align="center">Buildflow</h1>
 
 <p align="center"><b>See how a website, app or game works, then have AI build your own version. Free, on your own computer, with the AI you already have.</b></p>
 
