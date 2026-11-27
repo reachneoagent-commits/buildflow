@@ -1,4 +1,5 @@
 {
   "repo": "storytold/craft-anything",
-  "tag": "v0.6.1"
+  "tag": "v0.6.1",
+  "conflicts": "theirs"
 }

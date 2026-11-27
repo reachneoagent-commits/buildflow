@@ -18,7 +18,7 @@ version of any conflicted file and re-apply our changes in one step.
 | `brand/` (logo, colours, `.ai` source) | `assets/app-icon/` (file names theirs, artwork ours: `rebrand/icons.sh`) |
 | `crates/ui-egui/src/flow_theme.rs` (all our colours) | `Cargo.toml`, `CLAUDE.md`, `NOTICE`, `.gitattributes` |
 | `docs/UPSTREAM.md`, `README.md` | |
-| `.github/workflows/release.yml`, `upstream-check.yml`, `pages.yml` | |
+| `.github/workflows/release.yml`, `upstream-check.yml`, `upstream-prepare.yml`, `pages.yml` | |
 | `site/` (the GitHub Pages site) | |
 
 What the script changes, in short: the display name (Craft Anything → Buildflow) wherever it is
@@ -31,13 +31,6 @@ What we leave alone on purpose: crate names (`craft-anything-*`), the binaries (
 `craft-anything-cli`), environment variables (`CRAFT_ANYTHING_*`), the `.cany` project format, the
 MCP server name, licences and credits, upstream's own docs, and the Linux and FreeBSD packaging
 (we ship macOS and Windows only).
-
-## Weekly check
-
-The **Upstream check** workflow runs every Monday. It compares upstream's newest release tag with
-the one in `rebrand/upstream.json`. If there is a newer one it tries the merge and the rebrand in
-a scratch checkout and opens an issue saying whether it went through cleanly. It never changes
-Buildflow or ships anything: a person does the merge below.
 
 ## Merging an upstream release
 
@@ -98,3 +91,19 @@ publishes a GitHub release. Builds are not signed with a paid certificate. After
 version number, update the download links in `README.md` and `site/index.html`, which name the
 version (`v0.6.1/buildflow-0.6.1-…`). The FlowApps launcher
 installs and updates Buildflow from those releases.
+
+## Automatic check and prepare
+
+`rebrand/upstream.py` (the same file in every FlowApps fork) and two workflows do the routine part:
+
+- **Upstream check** runs every Monday and on demand. It keeps one `upstream-update` issue current:
+  the new upstream commits, a trial merge, and whether the rebrand still applies. It closes the issue
+  once we're up to date.
+- **Upstream prepare** runs only by hand. It merges upstream on an `upstream-sync/<date>` branch,
+  re-applies the branding, checks it, updates `rebrand/upstream.json` and opens a pull request for
+  review. It needs the `UPSTREAM_PUSH_TOKEN` secret (see the workflow). If a conflict or the rebrand
+  needs a person, it stops without pushing anything; then merge by hand as above.
+
+`"conflicts"` in `rebrand/upstream.json` is `"theirs"`: a conflicted file takes upstream's version and the rebrand brands it again. Upstream's own workflow changes are
+never brought in automatically; the pull request lists them. Locally: `python3 rebrand/upstream.py
+status`, `report --out FILE` or `prepare --body FILE`.
